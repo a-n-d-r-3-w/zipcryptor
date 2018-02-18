@@ -53,8 +53,8 @@ set timeout -1
 spawn zip -e files.zip "$files"
 match_max 100000
 expect -exact "Enter password: "
-send "$password\r"
+send -- "$password\r"
 expect -exact "\r
 Verify password: "
-send "$password\r"
+send -- "$password\r"
 expect eof
