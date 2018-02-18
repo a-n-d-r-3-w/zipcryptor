@@ -1,5 +1,6 @@
 import React from 'react';
 import { ipcRenderer } from 'electron';
+import Reboot from 'material-ui/Reboot';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ export default class App extends React.Component {
 
   render() {
     return (<div>
+      <Reboot />
       <h2>Welcome to React!</h2>
     </div>);
   }
