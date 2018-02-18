@@ -7,6 +7,7 @@ import Grid from 'material-ui/Grid';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import FileIcon from 'material-ui-icons/InsertDriveFile';
 
 const styles = theme => ({
   gridContainer: {
@@ -17,6 +18,9 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 2,
   },
   listItem: {
+    padding: 0,
+  },
+  listItemText: {
     padding: 0,
   },
   button: {
@@ -60,7 +64,10 @@ class App extends React.Component {
             <Typography variant="subheading">Selected files:</Typography>
             <List>
               {this.state.selectedFiles.map(file => {
-                return <ListItem key={file} className={classes.listItem}><ListItemText primary={file}/></ListItem>
+                return <ListItem key={file} className={classes.listItem}>
+                  <ListItemIcon><FileIcon/></ListItemIcon>
+                  <ListItemText primary={file} className={classes.listItemText}/>
+                </ListItem>
               })}
             </List>
           </Grid>
