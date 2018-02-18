@@ -21,6 +21,8 @@
 # character to toggle this mode off and on.
 
 set password [lindex $argv 0]; # Andrew: Get password from command line argument.
+set files [lrange $argv 1 end]; # Andrew Get the rest of the arguments as a list of files.
+# send_user "$files" # Andrew: For debugging.
 
 set force_conservative 0  ;# set to 1 to force conservative mode even if
                           ;# script wasn't run conservatively originally
@@ -48,7 +50,7 @@ if {$force_conservative} {
 
 
 set timeout -1
-spawn zip -e files.zip package.json
+spawn zip -e files.zip "$files"
 match_max 100000
 expect -exact "Enter password: "
 send "$password\r"
