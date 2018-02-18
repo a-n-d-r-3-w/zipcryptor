@@ -40,19 +40,23 @@ class App extends React.Component {
       password: '',
     };
     this.updatePassword = this.updatePassword.bind(this);
+    this.writeFile = this.writeFile.bind(this);
   }
 
   componentWillMount() {
     ipcRenderer.on('files-selected', (event, selectedFiles) => {
       this.setState({ selectedFiles });
     });
-    // ipcRenderer.send('show-open-dialog');
   }
 
   updatePassword(event) {
     this.setState({
       password: event.target.value,
     });
+  }
+
+  writeFile() {
+    ipcRenderer.send('write-file', this.state);
   }
 
   render() {
@@ -84,7 +88,9 @@ class App extends React.Component {
           this.state.selectedFiles.length > 0 &&
           <Grid item className={classes.gridItem}>
             <TextField label="Password" type="password" onChange={this.updatePassword} value={this.state.password}/>
-            <Button variant="raised" color="primary" className={classes.button}>Create encrypted ZIP file</Button>
+            <Button variant="raised" color="primary" className={classes.button} onClick={this.writeFile} disabled={!this.state.password}>
+              Write encrypted ZIP file
+            </Button>
           </Grid>
         }
       </Grid>

@@ -43,6 +43,10 @@ const createWindow = async () => {
     event.sender.send('files-selected', selectedFiles);
   });
 
+  ipcMain.on('write-file', (event, args) => {
+    console.log(args);
+  });
+
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
