@@ -6,14 +6,29 @@ import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
 const styles = theme => ({
-  container: {
+  gridContainer: {
     marginTop: theme.spacing.unit * 8,
   },
+  gridItem: {
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2,
+  },
+  listItem: {
+    padding: 0,
+  },
+  button: {
+    marginLeft: theme.spacing.unit * 2,
+  }
 });
 
 class App extends React.Component {
+  static showOpenDialog() {
+    ipcRenderer.send('show-open-dialog');
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +38,7 @@ class App extends React.Component {
 
   componentWillMount() {
     ipcRenderer.on('files-selected', (event, selectedFiles) => {
-      console.log(selectedFiles);
+      this.setState({ selectedFiles });
     });
     // ipcRenderer.send('show-open-dialog');
   }
@@ -31,25 +46,32 @@ class App extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid container direction="column" alignItems="center" className={classes.container}>
+      <Grid container direction="column" alignItems="center" className={classes.gridContainer}>
         <Reboot/>
-        <Grid item>
-          <Typography variant="title">Welcome to ZipCryptor!</Typography>
+        <Grid item className={classes.gridItem}>
+          <Typography variant="display1">Welcome to ZipCryptor!</Typography>
         </Grid>
         <Grid item>
-          <Button variant="raised">Select files</Button>
+          <Button variant="raised" onClick={App.showOpenDialog}>Select files</Button>
         </Grid>
-        <Grid item>
-          
-        <Grid item>
-          <TextField
-            id="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            margin="normal"
-          />
-        </Grid>
+        {
+          this.state.selectedFiles.length > 0 &&
+          <Grid item className={classes.gridItem}>
+            <Typography variant="subheading">Selected files:</Typography>
+            <List>
+              {this.state.selectedFiles.map(file => {
+                return <ListItem key={file} className={classes.listItem}><ListItemText primary={file}/></ListItem>
+              })}
+            </List>
+          </Grid>
+        }
+        {
+          this.state.selectedFiles.length > 0 &&
+          <Grid item className={classes.gridItem}>
+            <TextField label="Password" type="password" />
+            <Button variant="raised" color="primary" className={classes.button}>Create encrypted ZIP file</Button>
+          </Grid>
+        }
       </Grid>
     );
   }
