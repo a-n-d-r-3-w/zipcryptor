@@ -2,3 +2,4 @@ node_modules
 out
 .eslintcache
 .idea
+.DS_Store

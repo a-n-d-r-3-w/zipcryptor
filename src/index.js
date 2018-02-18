@@ -45,6 +45,9 @@ const createWindow = async () => {
 
   ipcMain.on('write-file', (event, args) => {
     console.log(args);
+    const { password, selectedFiles } = args;
+    let command = 'createEncryptedZipFile.exp ' + password;
+    console.info(`Command: ${command}`);
   });
 
   // Emitted when the window is closed.
