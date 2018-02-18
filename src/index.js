@@ -46,7 +46,7 @@ const createWindow = async () => {
   ipcMain.on('write-file', (event, args) => {
     console.log(args);
     const { password, selectedFiles } = args;
-    let command = 'createEncryptedZipFile.exp ' + password;
+    let command = './createEncryptedZipFile.exp ' + password + ' ' + selectedFiles.join(' ');
     console.info(`Command: ${command}`);
   });
 

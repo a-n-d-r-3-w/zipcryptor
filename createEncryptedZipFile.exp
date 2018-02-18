@@ -22,7 +22,8 @@
 
 set password [lindex $argv 0]; # Andrew: Get password from command line argument.
 set files [lrange $argv 1 end]; # Andrew Get the rest of the arguments as a list of files.
-# send_user "$files" # Andrew: For debugging.
+# send_user "$password"; # Andrew: For debugging.
+# send_user "$files"; # Andrew: For debugging.
 
 set force_conservative 0  ;# set to 1 to force conservative mode even if
                           ;# script wasn't run conservatively originally
