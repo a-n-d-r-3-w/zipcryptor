@@ -6,12 +6,14 @@ import {
 } from 'electron';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { enableLiveReload } from 'electron-compile';
+import child_process from 'child_process';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-const isDevMode = process.execPath.match(/[\\/]electron/);
+// const isDevMode = process.execPath.match(/[\\/]electron/);
+const isDevMode = false;
 
 if (isDevMode) enableLiveReload({ strategy: 'react-hmr' });
 
@@ -43,11 +45,12 @@ const createWindow = async () => {
     event.sender.send('files-selected', selectedFiles);
   });
 
-  ipcMain.on('write-file', (event, args) => {
-    console.log(args);
+  ipcMain.on('write-zip-file', (event, args) => {
     const { password, selectedFiles } = args;
     let command = './createEncryptedZipFile.exp ' + password + ' ' + selectedFiles.join(' ');
-    console.info(`Command: ${command}`);
+    child_process.execSync(command);
+    child_process.execSync('mv files.zip ~/Desktop/');
+    event.sender.send('zip-file-written');
   });
 
   // Emitted when the window is closed.

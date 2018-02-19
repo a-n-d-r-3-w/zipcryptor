@@ -38,14 +38,20 @@ class App extends React.Component {
     this.state = {
       selectedFiles: [],
       password: '',
+      isZipFileWritten: false,
     };
     this.updatePassword = this.updatePassword.bind(this);
-    this.writeFile = this.writeFile.bind(this);
+    this.writeZipFile = this.writeZipFile.bind(this);
   }
 
   componentWillMount() {
     ipcRenderer.on('files-selected', (event, selectedFiles) => {
       this.setState({ selectedFiles });
+    });
+    ipcRenderer.on('zip-file-written', () => {
+      this.setState({
+        isZipFileWritten: true,
+      });
     });
   }
 
@@ -55,12 +61,22 @@ class App extends React.Component {
     });
   }
 
-  writeFile() {
-    ipcRenderer.send('write-file', this.state);
+  writeZipFile() {
+    ipcRenderer.send('write-zip-file', this.state);
   }
 
   render() {
     const { classes } = this.props;
+    if (this.state.isZipFileWritten) {
+      return (
+        <Grid container direction="column" alignItems="center" className={classes.gridContainer}>
+          <Reboot/>
+          <Grid item className={classes.gridItem}>
+            <Typography>ZIP file written to ~/Desktop/files.zip. Thank you for using ZipCryptor!</Typography>
+          </Grid>
+        </Grid>
+      );
+    }
     return (
       <Grid container direction="column" alignItems="center" className={classes.gridContainer}>
         <Reboot/>
@@ -68,7 +84,7 @@ class App extends React.Component {
           <Typography variant="display1">Welcome to ZipCryptor!</Typography>
         </Grid>
         <Grid item>
-          <Button variant="raised" onClick={App.showOpenDialog}>Select files</Button>
+          <Button autoFocus variant="raised" onClick={App.showOpenDialog}>Select files</Button>
         </Grid>
         {
           this.state.selectedFiles.length > 0 &&
@@ -87,8 +103,8 @@ class App extends React.Component {
         {
           this.state.selectedFiles.length > 0 &&
           <Grid item className={classes.gridItem}>
-            <TextField label="Password" type="password" onChange={this.updatePassword} value={this.state.password}/>
-            <Button variant="raised" color="primary" className={classes.button} onClick={this.writeFile} disabled={!this.state.password}>
+            <TextField autoFocus label="Password" type="password" onChange={this.updatePassword} value={this.state.password}/>
+            <Button variant="raised" color="primary" className={classes.button} onClick={this.writeZipFile} disabled={!this.state.password}>
               Write encrypted ZIP file
             </Button>
           </Grid>
