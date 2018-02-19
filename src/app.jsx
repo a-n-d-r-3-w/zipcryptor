@@ -39,6 +39,7 @@ class App extends React.Component {
       selectedFiles: [],
       password: '',
       isZipFileWritten: false,
+      zipFileName: '',
     };
     this.updatePassword = this.updatePassword.bind(this);
     this.writeZipFile = this.writeZipFile.bind(this);
@@ -49,9 +50,10 @@ class App extends React.Component {
     ipcRenderer.on('files-selected', (event, selectedFiles) => {
       this.setState({ selectedFiles });
     });
-    ipcRenderer.on('zip-file-written', () => {
+    ipcRenderer.on('zip-file-written', (event, zipFileName) => {
       this.setState({
         isZipFileWritten: true,
+        zipFileName,
       });
     });
   }
@@ -78,8 +80,17 @@ class App extends React.Component {
       return (
         <Grid container direction="column" alignItems="center" className={classes.gridContainer}>
           <Reboot/>
+          <br /><br /><br />
           <Grid item className={classes.gridItem}>
-            <Typography>ZIP file written to ~/Desktop/files.zip. Thank you for using ZipCryptor!</Typography>
+            <Typography variant="title">ZIP file written to ~/Desktop/{this.state.zipFileName}.</Typography>
+          </Grid>
+          <br /><br /><br />
+          <Grid item className={classes.gridItem}>
+            <Typography variant="title">Thank you for using ZipCryptor!</Typography>
+          </Grid>
+          <br />
+          <Grid item className={classes.gridItem}>
+            <Typography variant="title">Press command+q to quit.</Typography>
           </Grid>
         </Grid>
       );

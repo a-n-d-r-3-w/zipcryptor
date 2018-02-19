@@ -47,14 +47,22 @@ const createWindow = async () => {
 
   ipcMain.on('write-zip-file', (event, args) => {
     const date = (new Date())
-      .toLocaleDateString('ja-JP', {month: '2-digit', day: '2-digit', year: 'numeric'})
-      .replace(/\//g, '-');
-    const fileName = date + '-files.zip';
+      .toLocaleDateString('ja-JP', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+      .replace(/([\/\s])/g, '-').replace(/:/g, '');
+    console.log(date);
+    const zipFileName = date + '-files.zip';
     const { password, selectedFiles } = args;
-    let command = './createEncryptedZipFile.exp ' + fileName + ' ' + password + ' ' + selectedFiles.join(' ');
+    let command = './createEncryptedZipFile.exp ' + zipFileName + ' ' + password + ' ' + selectedFiles.join(' ');
     child_process.execSync(command);
-    child_process.execSync('mv ' + fileName + ' ~/Desktop/');
-    event.sender.send('zip-file-written');
+    child_process.execSync('mv ' + zipFileName + ' ~/Desktop/');
+    event.sender.send('zip-file-written', zipFileName);
   });
 
   // Emitted when the window is closed.
