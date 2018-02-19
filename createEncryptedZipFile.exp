@@ -20,8 +20,9 @@
 # this in the first place.  The -C flag allows you to define a
 # character to toggle this mode off and on.
 
-set password [lindex $argv 0]; # Andrew: Get password from command line argument.
-set files [lrange $argv 1 end]; # Andrew Get the rest of the arguments as a list of files.
+set filename [lindex $argv 0]; # Andrew: Get filename from command line argument.
+set password [lindex $argv 1]; # Andrew: Get password from command line argument.
+set files [lrange $argv 2 end]; # Andrew Get the rest of the arguments as a list of files.
 # send_user "$password"; # Andrew: For debugging.
 # send_user "$files"; # Andrew: For debugging.
 
@@ -51,8 +52,8 @@ if {$force_conservative} {
 
 
 set timeout -1
-# The {*} is required to expand the list.
-spawn zip -e files.zip {*}$files
+# The {*} is required to expand the file list.
+spawn zip -e $filename {*}$files
 match_max 100000
 expect -exact "Enter password: "
 send -- "$password\r"

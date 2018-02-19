@@ -46,10 +46,14 @@ const createWindow = async () => {
   });
 
   ipcMain.on('write-zip-file', (event, args) => {
+    const date = (new Date())
+      .toLocaleDateString('ja-JP', {month: '2-digit', day: '2-digit', year: 'numeric'})
+      .replace(/\//g, '-');
+    const fileName = date + '-files.zip';
     const { password, selectedFiles } = args;
-    let command = './createEncryptedZipFile.exp ' + password + ' ' + selectedFiles.join(' ');
+    let command = './createEncryptedZipFile.exp ' + fileName + ' ' + password + ' ' + selectedFiles.join(' ');
     child_process.execSync(command);
-    child_process.execSync('mv files.zip ~/Desktop/');
+    child_process.execSync('mv ' + fileName + ' ~/Desktop/');
     event.sender.send('zip-file-written');
   });
 
