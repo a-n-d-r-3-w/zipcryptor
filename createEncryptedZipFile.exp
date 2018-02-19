@@ -51,7 +51,8 @@ if {$force_conservative} {
 
 
 set timeout -1
-spawn zip -e files.zip {*}$files # The {*} is required to expand the list.
+# The {*} is required to expand the list.
+spawn zip -e files.zip {*}$files
 match_max 100000
 expect -exact "Enter password: "
 send -- "$password\r"
