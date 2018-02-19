@@ -2,7 +2,7 @@
   "name": "zipcryptor",
   "productName": "zipcryptor",
   "version": "1.0.0",
-  "description": "Drag-and-drop to create an encrypted ZIP file",
+  "description": "A Mac app for creating encrypted ZIP files, implemented using Electron, React, Material UI, and autoexpect",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
