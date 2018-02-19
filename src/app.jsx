@@ -42,6 +42,7 @@ class App extends React.Component {
     };
     this.updatePassword = this.updatePassword.bind(this);
     this.writeZipFile = this.writeZipFile.bind(this);
+    this.handlePasswordFieldKeyPress = this.handlePasswordFieldKeyPress.bind(this);
   }
 
   componentWillMount() {
@@ -63,6 +64,12 @@ class App extends React.Component {
 
   writeZipFile() {
     ipcRenderer.send('write-zip-file', this.state);
+  }
+
+  handlePasswordFieldKeyPress(event) {
+    if (event.key === 'Enter') {
+      this.writeZipFile();
+    }
   }
 
   render() {
@@ -103,8 +110,20 @@ class App extends React.Component {
         {
           this.state.selectedFiles.length > 0 &&
           <Grid item className={classes.gridItem}>
-            <TextField autoFocus label="Password" type="password" onChange={this.updatePassword} value={this.state.password}/>
-            <Button variant="raised" color="primary" className={classes.button} onClick={this.writeZipFile} disabled={!this.state.password}>
+            <TextField
+              onKeyPress={this.handlePasswordFieldKeyPress}
+              autoFocus
+              label="Password"
+              type="password"
+              onChange={this.updatePassword}
+              value={this.state.password}
+            />
+            <Button
+              variant="raised"
+              color="primary"
+              className={classes.button}
+              onClick={this.writeZipFile}
+              disabled={!this.state.password}>
               Write encrypted ZIP file
             </Button>
           </Grid>
