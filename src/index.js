@@ -7,6 +7,7 @@ import {
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { enableLiveReload } from 'electron-compile';
 import child_process from 'child_process';
+import path from 'path';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -56,12 +57,13 @@ const createWindow = async () => {
         second: '2-digit',
       })
       .replace(/([\/\s])/g, '-').replace(/:/g, '');
-    console.log(date);
     const zipFileName = date + '-files.zip';
+    const zipFilePath = path.join(__dirname, zipFileName);
     const { password, selectedFiles } = args;
-    let command = './createEncryptedZipFile.exp ' + zipFileName + ' ' + password + ' ' + selectedFiles.join(' ');
+    let command = path.join(__dirname, 'createEncryptedZipFile.exp') + ' ' +
+      zipFilePath + ' ' + password + ' ' + selectedFiles.join(' ');
     child_process.execSync(command);
-    child_process.execSync('mv ' + zipFileName + ' ~/Desktop/');
+    child_process.execSync('mv ' + zipFilePath + ' ~/Desktop/');
     event.sender.send('zip-file-written', zipFileName);
   });
 
