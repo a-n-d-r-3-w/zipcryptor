@@ -48,7 +48,8 @@ class App extends React.Component {
 
   componentWillMount() {
     ipcRenderer.on('files-selected', (event, selectedFiles) => {
-      this.setState({ selectedFiles });
+      const quotedSelectedFiles = selectedFiles.map(file => `"${file}"`);
+      this.setState({ selectedFiles: quotedSelectedFiles });
     });
     ipcRenderer.on('zip-file-written', (event, zipFileName) => {
       this.setState({
